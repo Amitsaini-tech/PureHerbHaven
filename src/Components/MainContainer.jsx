@@ -1,8 +1,11 @@
 import React from 'react'
+import Homecontainer from './Homecontainer'
 
 const MainContainer = () => {
   return (
-    <div>MainContainer</div>
+    <div className="">
+      <Homecontainer/>
+    </div>
   )
 }
 
