@@ -16,6 +16,7 @@ export default function Homecontainer() {
         slidesToScroll: 1,
     };
     return (
+        <div>
         <Slider {...settings} className="  flex items-center justify-center mx-[4rem]">
             
             <div>
@@ -37,5 +38,7 @@ export default function Homecontainer() {
                 <h3><img src={summer} alt=""  className=" w-full h-[20rem] px-5"/></h3>
             </div>
         </Slider>
+        
+        </div>
     );
 }
