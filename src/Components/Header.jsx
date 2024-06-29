@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Instagram from "../image/instagram.png"
 import Facebook from "../image/facebook.png"
 import Whatsapp from "../image/whatsapp.png"
