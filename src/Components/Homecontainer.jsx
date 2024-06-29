@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-// import Slider from "react-slick";
+
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import sandalwood from "../image/sandalwood.avif"
@@ -7,7 +7,7 @@ import summer from "../image/herbal summer.jpg"
 import herbal from "../image/herbal-products.jpg"
 import lipsticks from "../image/lipsticks.webp"
 import { GoArrowLeft, GoArrowRight } from "react-icons/go";
-// import { BsArrowRight } from "react-icons/bs";
+
 
 
 const images = [sandalwood, summer, herbal, lipsticks]
