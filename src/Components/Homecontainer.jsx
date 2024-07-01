@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-
+import Midcontainer from "./midContainer";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import sandalwood from "../image/sandalwood.avif"
@@ -31,7 +31,7 @@ const Homecontainer = () => {
     };
 
     return (
-        <div>
+        <div className="w-full h-full">
             <div className="relative w-full h-[20rem] overflow-hidden">
                 {images.map((image, index) => (
                     <div
@@ -55,6 +55,7 @@ const Homecontainer = () => {
                     <GoArrowRight />
                 </button>
             </div>
+            <Midcontainer/>
         </div>
     );
 }
