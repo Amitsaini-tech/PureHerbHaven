@@ -15,7 +15,7 @@ const Header = () => {
             fontFamily: "Playwrite AU SA,cursive"
           }}><span className="-rotate-2">PureHerbHaven</span>
         </div>
-        <div className=" flex flex-col justify-center  w-full border border-gray-100">
+        <div className=" flex flex-col justify-center  w-full  ">
           <div className="flex flex-row items-center justify-between bg-slate-600 w-full h-[3.5rem]">
             <div className="w-full h-auto">
               <span className=" mx-2 text-lg text-gray-100">+91-7982071088</span>
@@ -29,12 +29,11 @@ const Header = () => {
                   <img src={Facebook} alt="" /></p>
                 <p className=" flex items-center justify-center w-10 h-10 mx-2 rounded-full">
                   <img src={Whatsapp} alt="" /></p>
-                <p className=" flex items-center justify-center w-10 h-10 bg-gray-50 mx-2 rounded-full">4</p>
               </ul>
             </div>
           </div>
           {/* second */}
-          <div className="flex flex-row items-center justify-between bg-gray-700 w-full h-[3.5rem] border border-gray-100">
+          <div className="flex flex-row items-center justify-between bg-gray-700 w-full h-[3.5rem] ">
             <div >
               <ul className="flex flex-row items-center justify-center">
                 <li className=" flex items-center justify-center text-gray-100 font-sans font-medium hover:text-green-300 cursor-pointer h-10 mx-2">Home</li>
