@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { categories } from '../utils/data';
 import { Link } from 'react-router-dom';
+import video from "../image/video.mp4"
 
 const MidContainer = () => {
-  const [selectedSub, setSelectedSub] = useState(null);
+  const [selectedSub, setSelectedSub] = useState(categories[0].sub);
 
   const handleSubClick = (sub) => {
     setSelectedSub(sub);
@@ -23,7 +24,7 @@ const MidContainer = () => {
         ))}
       </div>
 
-      <div className=" w-full flex flex-row flex-wrap items-center justify-start gap-1 mt-5">
+      <div className=" w-full flex flex-row flex-wrap items-center justify-start gap-1 my-5 py-3 px-4">
         {categories
           .filter((category) => category.sub === selectedSub)
           .flatMap((category) => category.posts)
@@ -33,7 +34,7 @@ const MidContainer = () => {
               className="w-[21rem]  h-[36rem] flex flex-col items-center justify-start m-2"
             >
               <img src={post.imgsrc} alt="" className="w-[22rem] h-[29rem]" />
-              <span className="text-lg font-light my-2 capitalize">{post.title}</span>
+              <span className="text-md font-light my-2 capitalize">{post.title}</span>
               <span className="text-[12px] font-normal text-orange-700 capitalize">{post.Highlight}</span>
               <span className="text-lg font-mono my-2">{post.Price}</span>
               <br />
@@ -48,6 +49,9 @@ const MidContainer = () => {
             </div>
           ))}
 
+      </div>
+      <div>
+        <video src={video} autoPlay="true" loop="true" className="my-5 py-3 px-5"/>
       </div>
     </div>
   );
