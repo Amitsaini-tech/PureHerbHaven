@@ -1,0 +1,56 @@
+import React, { useState } from 'react';
+import { categories } from '../utils/data';
+import { Link } from 'react-router-dom';
+
+const MidContainer = () => {
+  const [selectedSub, setSelectedSub] = useState(null);
+
+  const handleSubClick = (sub) => {
+    setSelectedSub(sub);
+  };
+
+  return (
+    <div>
+      <div className="grid grid-cols-3">
+        {categories.map(({ sub }) => (
+          <div
+            key={sub}
+            className="w-full h-full flex items-center justify-center my-5 py-3 px-5 cursor-pointer"
+            onClick={() => handleSubClick(sub)}
+          >
+            <span className="text-2xl font-medium">{sub}</span>
+          </div>
+        ))}
+      </div>
+
+      <div className=" w-full flex flex-row flex-wrap items-center justify-start gap-1 mt-5">
+        {categories
+          .filter((category) => category.sub === selectedSub)
+          .flatMap((category) => category.posts)
+          .map((post) => (
+            <div
+              key={post.id}
+              className="w-[21rem]  h-[36rem] flex flex-col items-center justify-start m-2"
+            >
+              <img src={post.imgsrc} alt="" className="w-[22rem] h-[29rem]" />
+              <span className="text-lg font-light my-2">{post.title}</span>
+              <span className="text-sm font-normal text-orange-700">{post.Highlight}</span>
+              <span className="text-lg font-mono my-2">{post.Price}</span>
+              <br />
+              <Link to={post.path}>
+              <button
+                type="button"
+                className="w-[21rem] bg-red-200 hover:bg-red-300 h-10 font-mono"
+              >
+                Add to cart
+              </button>
+              </Link>
+            </div>
+          ))}
+
+      </div>
+    </div>
+  );
+};
+
+export default MidContainer;
