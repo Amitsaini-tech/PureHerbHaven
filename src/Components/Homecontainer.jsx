@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Midcontainer from "./midContainer";
+import Midcontainer from "./MidContainer";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import sandalwood from "../image/sandalwood.avif"
