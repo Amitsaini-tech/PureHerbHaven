@@ -33,8 +33,8 @@ const MidContainer = () => {
               className="w-[21rem]  h-[36rem] flex flex-col items-center justify-start m-2"
             >
               <img src={post.imgsrc} alt="" className="w-[22rem] h-[29rem]" />
-              <span className="text-lg font-light my-2">{post.title}</span>
-              <span className="text-sm font-normal text-orange-700">{post.Highlight}</span>
+              <span className="text-lg font-light my-2 capitalize">{post.title}</span>
+              <span className="text-[12px] font-normal text-orange-700 capitalize">{post.Highlight}</span>
               <span className="text-lg font-mono my-2">{post.Price}</span>
               <br />
               <Link to={post.path}>
