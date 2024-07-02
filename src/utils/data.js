@@ -28,25 +28,25 @@ export const categories = [
         {
             id: 2,
             imgsrc:image3,
-            title: 'Serum-infused volume boost Mascara....',
-            Highlight: 'instant volume | waterproof | 24 Hours stay',
-            Price: 'MRP ₹499.00',
+            title: 'Lumi-glow strobe cream with lotus and ...',
+            Highlight: 'Barbie pink glow | 18 Hours stay | moisturiser',
+            Price: 'MRP ₹495.00',
             path: '/'
           },
           {
             id: 3,
             imgsrc:image9,
-            title: 'Serum-infused volume boost Mascara....',
-            Highlight: 'instant volume | waterproof | 24 Hours stay',
-            Price: 'MRP ₹499.00',
+            title: 'Lumi-glow Pressed Highlighter wi...',
+            Highlight: '3 Highly Luminous shades | 18 hours stay | Non-patchy',
+            Price: 'MRP ₹425.00',
             path: '/'
           },
           {
             id: 4,
             imgsrc:image8,
-            title: 'Serum-infused volume boost Mascara....',
-            Highlight: 'instant volume | waterproof | 24 Hours stay',
-            Price: 'MRP ₹499.00',
+            title: 'Nourishing powder blush with bee...',
+            Highlight: 'highly pigmented | silky matte finish | noursihing',
+            Price: 'MRP ₹395.00',
             path: '/'
           },
           
@@ -58,33 +58,33 @@ export const categories = [
         {
             id: 1,
             imgsrc:image6,
-            title: 'Serum-infused volume boost Mascara....',
-            Highlight: 'instant volume | waterproof | 24 Hours stay',
-            Price: 'MRP ₹499.00',
+            title: 'herb enriched ayurvedic lipstick....',
+            Highlight: 'Nurtures & Repairs | Moisturises',
+            Price: 'MRP ₹575.00',
             path: '/'
           },
           {
               id: 2,
               imgsrc:image2,
-              title: 'Serum-infused volume boost Mascara....',
-              Highlight: 'instant volume | waterproof | 24 Hours stay',
-              Price: 'MRP ₹499.00',
+              title: 'nourishing lip and cheek tint.',
+              Highlight: 'Creamy-matte | Suitable For Pigmented Lips',
+              Price: 'MRP ₹695.00',
               path: '/'
             },
             {
               id: 3,
               imgsrc:image4,
-              title: 'Serum-infused volume boost Mascara....',
-              Highlight: 'instant volume | waterproof | 24 Hours stay',
-              Price: 'MRP ₹499.00',
+              title: 'Kimsukadi tail- glow boosting f....',
+              Highlight: 'Soothes Skin | Nourishes Skin | Imparts Natural Glow',
+              Price: 'MRP ₹995.00',
               path: '/'
             },
             {
               id: 4,
               imgsrc:image12,
-              title: 'Serum-infused volume boost Mascara....',
-              Highlight: 'instant volume | waterproof | 24 Hours stay',
-              Price: 'MRP ₹499.00',
+              title: 'Herb enriched matte liquid lipst....',
+              Highlight: 'Weightless-matte | Hydrating & Long-lasting',
+              Price: 'MRP ₹745.00',
               path: '/'
             },
       ],
@@ -95,33 +95,33 @@ export const categories = [
         {
             id: 1,
             imgsrc:image10,
-            title: 'Serum-infused volume boost Mascara....',
-            Highlight: 'instant volume | waterproof | 24 Hours stay',
-            Price: 'MRP ₹499.00',
+            title: 'A thousand kisses.',
+            Highlight: 'Highly Pigmented | Long-Lasting | Perfect Valentine Gift',
+            Price: 'MRP ₹909.00',
             path: '/'
           },
           {
               id: 2,
               imgsrc:image5,
-              title: 'Serum-infused volume boost Mascara....',
-              Highlight: 'instant volume | waterproof | 24 Hours stay',
-              Price: 'MRP ₹499.00',
+              title: 'Makeup essentials giam box',
+              Highlight: 'nsta-ready Makeup | Travel-friendly | Perfect For Gifting',
+              Price: 'MRP ₹1523.00',
               path: '/'
             },
             {
               id: 3,
               imgsrc:image11,
-              title: 'Serum-infused volume boost Mascara....',
-              Highlight: 'instant volume | waterproof | 24 Hours stay',
-              Price: 'MRP ₹499.00',
+              title: 'travel touch up kit',
+              Highlight: 'Lightweight | Touch-up Essentials | Travel-friendly',
+              Price: 'MRP ₹1033.00',
               path: '/'
             },
             {
               id: 4,
               imgsrc:image7,
-              title: 'Serum-infused volume boost Mascara....',
-              Highlight: 'instant volume | waterproof | 24 Hours stay',
-              Price: 'MRP ₹499.00',
+              title: 'party ready nail paint set',
+              Highlight: 'High-Shine Gloss Finish | No Chipping',
+              Price: 'MRP ₹452.00',
               path: '/'
             },
       ],
