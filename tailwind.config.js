@@ -51,7 +51,14 @@ module.exports = {
         textColor: "#515151",
         cartNumbg: "#e80013",
         primary: "#f5f3f3",
-      }
+        'triangle': '#FCD0C8',
+      },
+      fontFamily: {
+        sans: ['Graphik', 'sans-serif'],
+        serif: ['Merriweather', 'serif'],
+        classic: ["Baskervville SC", 'serif'],
+        cabin: ["Cabin", 'sans-serif'],
+      },
     },
   },
   plugins: [],
