@@ -6,7 +6,7 @@ const App = () => {
   return (
     <div className="w-screen h-full flex flex-col">
       <Header/>
-      <main className=" h-full mt-8 md:mt-12 lg:mt-1 px-5 w-full">
+      <main className=" h-full mt-8 md:mt-12 lg:mt-1 w-full">
         <Routes>
           <Route path='/*' element={<MainContainer />} />
         </Routes>
