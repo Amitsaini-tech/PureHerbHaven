@@ -6,7 +6,7 @@ import Mid2Container from './Mid2Container'
 
 const MainContainer = () => {
   return (
-    <div className="">
+    <div className="mt-16">
       <Homecontainer/>
       <Category/>
       <Mid2Container/>
