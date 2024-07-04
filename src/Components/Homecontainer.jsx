@@ -2,15 +2,17 @@ import React, { useEffect, useState } from "react";
 import Midcontainer from "./MidContainer";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import sandalwood from "../image/sandalwood.avif"
-import summer from "../image/herbal summer.jpg"
-import herbal from "../image/herbal-products.jpg"
-import lipsticks from "../image/lipsticks.webp"
+import sandalwood from "../image/Mob_b2g.webp"
+import summer from "../image/Web_LG_buy.webp"
+import herbal from "../image/b1g1_perfum.webp"
+import lipsticks from "../image/web_Lipstick.webp"
+import mid_year from "../image/mid_year.webp"
+import web_bed from "../image/web_bed.webp"
 import { GoArrowLeft, GoArrowRight } from "react-icons/go";
 
 
 
-const images = [sandalwood, summer, herbal, lipsticks]
+const images = [sandalwood, summer, herbal, lipsticks, mid_year, web_bed]
 
 const Homecontainer = () => {
     const [currentIndex, setcurrentIndex] = useState(0)
