@@ -10,7 +10,11 @@ import image9 from "../image/highlighter.webp"
 import image10 from "../image/thousand.webp"
 import image11 from "../image/travel touch.webp"
 import image12 from "../image/matte lipstick.webp"
-
+import image101 from "../image/grazia.avif"
+import image102 from "../image/Vogue.avif"
+import image103 from "../image/Forbes.avif"
+import image104 from "../image/cnbc.webp"
+import image105 from "../image/ET.webp"
 
 
 export const categories = [
@@ -124,6 +128,54 @@ export const categories = [
               Price: 'MRP ₹452.00',
               path: '/'
             },
+      ],
+    },
+  ]
+
+  export const theme = [
+    {
+      sub: image101,
+      posts: [
+        {
+          id: 1,
+          title: '"Makeup that doubles as skincare? Plus its cruelty-free and available in a variety of shades? Can we have some more please?"',
+        },  
+      ],
+    },
+    {
+      sub: image102,
+      posts: [
+        {
+          id: 1,
+          title: '"Just Herbs meticulously details how organic or natural each line is"',
+        },  
+      ],
+    },
+    {
+      sub: image103,
+      posts: [
+        {
+          id: 1,
+          title: '“A fresh approach to beauty.”',
+        },  
+      ],
+    },
+    {
+      sub: image104,
+      posts: [
+        {
+          id: 1,
+          title: '"Made in India, India-Proud"',
+        },  
+      ],
+    },
+    {
+      sub: image105,
+      posts: [
+        {
+          id: 1,
+          title: '"India’s first beauty brand to “crowd-source” its products; they involve customer feedback in product creation right from the idea stage"',
+        },  
       ],
     },
   ]
