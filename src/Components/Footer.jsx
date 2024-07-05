@@ -60,7 +60,7 @@ const Footer = () => {
                     <img src={image5} alt="" className=" w-14 h-8"/>
                     <img src={image6} alt="" className=" w-14 h-8"/>
                 </div>
-                <p className="flex items-center justify-center">100% secure payments</p>
+                <p className="flex items-center justify-center my-2">100% secure payments</p>
             </div>
         </div>
     )
