@@ -2,6 +2,7 @@ import React from 'react'
 import Homecontainer from './Homecontainer'
 import Category from './category'
 import Mid2Container from './Mid2Container'
+import Footer from './Footer'
 
 
 const MainContainer = () => {
@@ -10,6 +11,7 @@ const MainContainer = () => {
       <Homecontainer/>
       <Category/>
       <Mid2Container/>
+      <Footer/>
     </div>
   )
 }
