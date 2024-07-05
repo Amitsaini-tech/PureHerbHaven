@@ -34,7 +34,7 @@ const Homecontainer = () => {
 
     return (
         <div className="w-full h-full">
-            <div className="relative w-full h-[20rem] overflow-hidden">
+            <div className="relative w-full h-[31rem] overflow-hidden">
                 {images.map((image, index) => (
                     <div
                         key={index}
