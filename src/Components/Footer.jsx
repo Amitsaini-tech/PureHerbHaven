@@ -53,12 +53,12 @@ const Footer = () => {
             </div>
             <div className="my-5">
                 <div className="flex items-center justify-center gap-4">
-                    <img src={image1} alt="" className=" w-14 h-8"/>
-                    <img src={image2} alt="" className=" w-16 h-10"/>
-                    <img src={image3} alt="" className=" w-16 h-10"/>
-                    <img src={image4} alt="" className=" w-10 h-8"/>
-                    <img src={image5} alt="" className=" w-14 h-8"/>
-                    <img src={image6} alt="" className=" w-14 h-8"/>
+                    <img src={image1} alt="" className=" w-14 h-8" />
+                    <img src={image2} alt="" className=" w-16 h-10" />
+                    <img src={image3} alt="" className=" w-16 h-10" />
+                    <img src={image4} alt="" className=" w-10 h-8" />
+                    <img src={image5} alt="" className=" w-14 h-8" />
+                    <img src={image6} alt="" className=" w-14 h-8" />
                 </div>
                 <p className="flex items-center justify-center my-2">100% secure payments</p>
             </div>
