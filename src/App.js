@@ -14,6 +14,9 @@ import { CartProvider } from './context/CartContext'
 import { AuthProvider } from './context/AuthContext'
 import ProductUpload from './Components/Admin/ProductUpload'
 import AdminDashboard from './Components/Admin/AdminDashboard'
+import { ProtectedRoute, AdminRoute } from './Components/Auth/Routes'
+import Profile from './Components/Profile'
+import Orders from './Components/Orders'
 
 const App = () => {
   return (
@@ -30,10 +33,12 @@ const App = () => {
               <Route path='/product/:id' element={<ProductDetail />} />
               <Route path='/login' element={<Login />} />
               <Route path='/signup' element={<Signup />} />
-              <Route path='/checkout' element={<Checkout />} />
-              <Route path='/success' element={<OrderSuccess />} />
-              <Route path='/admin' element={<AdminDashboard />} />
-              <Route path='/admin/upload-product' element={<ProductUpload />} />
+               <Route path='/checkout' element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
+              <Route path='/success' element={<ProtectedRoute><OrderSuccess /></ProtectedRoute>} />
+              <Route path='/profile' element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+              <Route path='/orders' element={<ProtectedRoute><Orders /></ProtectedRoute>} />
+              <Route path='/admin' element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+              <Route path='/admin/upload-product' element={<AdminRoute><ProductUpload /></AdminRoute>} />
             </Routes>
           </main>
         </div>

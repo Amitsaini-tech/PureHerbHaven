@@ -1,28 +1,72 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
+import { db } from '../firebase';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import Footer from './Footer';
 
 const Checkout = () => {
     const { cartItems, getCartTotal, clearCart } = useCart();
+    const { user } = useAuth();
     const navigate = useNavigate();
     const [paymentMethod, setPaymentMethod] = useState('card');
     const [isProcessing, setIsProcessing] = useState(false);
+    
+    // Address form state
+    const [addressData, setAddressData] = useState({
+        fullName: user?.name || '',
+        address: '',
+        city: '',
+        postalCode: '',
+        phone: ''
+    });
+
+    const handleAddressChange = (e) => {
+        const { name, value } = e.target;
+        setAddressData(prev => ({ ...prev, [name]: value }));
+    };
 
     const subtotal = getCartTotal();
     const shipping = subtotal > 999 ? 0 : 50;
     const total = subtotal + shipping;
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setIsProcessing(true);
 
-        // Mock processing time
-        setTimeout(() => {
+        const orderId = `ORD-${Math.floor(Math.random() * 1000000000)}`;
+
+        try {
+            // Save order to Firestore
+            await addDoc(collection(db, "orders"), {
+                orderId,
+                userId: user.uid,
+                userEmail: user.email,
+                items: cartItems.map(item => ({
+                    id: item.id,
+                    title: item.title,
+                    price: item.Price,
+                    imgsrc: item.imgsrc,
+                    quantity: item.quantity
+                })),
+                subtotal,
+                shipping,
+                total,
+                paymentMethod,
+                shippingAddress: addressData,
+                status: 'Confirmed',
+                createdAt: serverTimestamp()
+            });
+
             clearCart();
             setIsProcessing(false);
-            navigate('/success');
-        }, 2000);
+            navigate('/success', { state: { orderId } });
+        } catch (error) {
+            console.error("Error saving order: ", error);
+            alert("Failed to process order. Please try again.");
+            setIsProcessing(false);
+        }
     };
 
     if (cartItems.length === 0) {
@@ -49,23 +93,23 @@ const Checkout = () => {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="md:col-span-2">
                                     <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-                                    <input type="text" required className="w-full px-4 py-2 border border-gray-300 rounded focus:ring-amber-500 focus:border-amber-500" />
+                                    <input type="text" required name="fullName" value={addressData.fullName} onChange={handleAddressChange} className="w-full px-4 py-2 border border-gray-300 rounded focus:ring-amber-500 focus:border-amber-500 bg-white" />
                                 </div>
                                 <div className="md:col-span-2">
                                     <label className="block text-sm font-medium text-gray-700 mb-1">Address</label>
-                                    <input type="text" required className="w-full px-4 py-2 border border-gray-300 rounded focus:ring-amber-500 focus:border-amber-500" />
+                                    <input type="text" required name="address" value={addressData.address} onChange={handleAddressChange} className="w-full px-4 py-2 border border-gray-300 rounded focus:ring-amber-500 focus:border-amber-500 bg-white" />
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-1">City</label>
-                                    <input type="text" required className="w-full px-4 py-2 border border-gray-300 rounded focus:ring-amber-500 focus:border-amber-500" />
+                                    <input type="text" required name="city" value={addressData.city} onChange={handleAddressChange} className="w-full px-4 py-2 border border-gray-300 rounded focus:ring-amber-500 focus:border-amber-500 bg-white" />
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-1">Postal Code</label>
-                                    <input type="text" required className="w-full px-4 py-2 border border-gray-300 rounded focus:ring-amber-500 focus:border-amber-500" />
+                                    <input type="text" required name="postalCode" value={addressData.postalCode} onChange={handleAddressChange} className="w-full px-4 py-2 border border-gray-300 rounded focus:ring-amber-500 focus:border-amber-500 bg-white" />
                                 </div>
                                 <div className="md:col-span-2">
                                     <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
-                                    <input type="tel" required className="w-full px-4 py-2 border border-gray-300 rounded focus:ring-amber-500 focus:border-amber-500" />
+                                    <input type="tel" required name="phone" value={addressData.phone} onChange={handleAddressChange} className="w-full px-4 py-2 border border-gray-300 rounded focus:ring-amber-500 focus:border-amber-500 bg-white" />
                                 </div>
                             </div>
                         </div>

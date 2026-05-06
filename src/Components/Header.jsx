@@ -7,18 +7,12 @@ import { useAuth } from '../context/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { db } from '../firebase';
 import { collection, getDocs, query } from 'firebase/firestore';
+import { CATEGORIES } from '../utils/constants';
 
-const navLinks = [
-  { name: 'Skin', path: '/category/skin' },
-  { name: 'Hair', path: '/category/hair' },
-  { name: 'Bath & Body', path: '/category/bath-body' },
-  { name: 'Natural Makeup', path: '/category/natural-makeup' },
-  { name: 'Pure Fragrances', path: '/category/pure-fragrances' },
-  { name: 'Offers', path: '/category/offers' },
-  { name: 'Gifting', path: '/category/gifting' },
-  { name: 'Build a Box', path: '/category/build-a-box' },
-  { name: 'Beauty Sale', path: '/category/beauty-sale' },
-];
+const navLinks = CATEGORIES.map(cat => ({
+  name: cat,
+  path: `/category/${cat.toLowerCase().replace(/ & /g, '-').replace(/ /g, '-')}`
+}));
 
 const Header = () => {
   const { toggleCart, getCartCount } = useCart();
@@ -160,7 +154,9 @@ const Header = () => {
                         </div>
                         <Link to="/profile" onClick={() => setIsProfileOpen(false)} className="block px-4 py-2 text-sm text-gray-700 hover:bg-amber-50 hover:text-amber-900">My Profile</Link>
                         <Link to="/orders" onClick={() => setIsProfileOpen(false)} className="block px-4 py-2 text-sm text-gray-700 hover:bg-amber-50 hover:text-amber-900">My Orders</Link>
-                        <Link to="/admin" onClick={() => setIsProfileOpen(false)} className="block px-4 py-2 text-sm font-medium text-amber-700 hover:bg-amber-50">Admin Dashboard</Link>
+                        {user.isAdmin && (
+                          <Link to="/admin" onClick={() => setIsProfileOpen(false)} className="block px-4 py-2 text-sm font-medium text-amber-700 hover:bg-amber-50">Admin Dashboard</Link>
+                        )}
                         <button 
                           onClick={() => {
                             setIsProfileOpen(false);

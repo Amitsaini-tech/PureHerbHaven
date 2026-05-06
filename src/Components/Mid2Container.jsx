@@ -3,7 +3,7 @@ import image1 from "../image/star circle.webp"
 import image2 from "../image/TP_MP.webp"
 import image3 from "../image/Crowd_Source.webp"
 import { IoBulbOutline, IoTelescopeOutline } from "react-icons/io5";
-import { theme } from '../utils/data';
+import { theme } from '../utils/constants';
 
 const Mid2Container = () => {
     const [selectedSub, setSelectedSub] = useState(theme[0].sub);

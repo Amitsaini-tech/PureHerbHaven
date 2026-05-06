@@ -4,6 +4,8 @@ import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import Footer from '../Footer';
+import { CATEGORIES } from '../../utils/constants';
+import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 
 const AdminDashboard = () => {
     const [stats, setStats] = useState({
@@ -12,6 +14,9 @@ const AdminDashboard = () => {
         recentUploads: []
     });
     const [loading, setLoading] = useState(true);
+    const [allProducts, setAllProducts] = useState([]);
+    const [filterCategory, setFilterCategory] = useState('All');
+    const [sortBy, setSortBy] = useState('newest');
 
     useEffect(() => {
         const fetchStats = async () => {
@@ -29,8 +34,9 @@ const AdminDashboard = () => {
                 setStats({
                     totalProducts: productsSnapshot.size,
                     categories: uniqueCategories.length,
-                    recentUploads: recent
+                    recentUploads: products.slice(0, 5) // Initial top 5 for dashboard stats
                 });
+                setAllProducts(products.map(p => ({ id: p.id || Math.random().toString(), ...p })));
             } catch (error) {
                 console.error("Error fetching stats:", error);
             } finally {
@@ -41,8 +47,36 @@ const AdminDashboard = () => {
         fetchStats();
     }, []);
 
+    const filteredAndSortedProducts = React.useMemo(() => {
+        let result = [...allProducts];
+
+        if (filterCategory !== 'All') {
+            result = result.filter(p => {
+                const cat = p.categories?.toLowerCase();
+                const filter = filterCategory.toLowerCase();
+                if (filter === 'skin') return cat === 'skin' || cat === 'skincare';
+                if (filter === 'hair') return cat === 'hair' || cat === 'haircare';
+                return cat === filter;
+            });
+        }
+
+        if (sortBy === 'newest') {
+            result.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+        } else if (sortBy === 'oldest') {
+            result.sort((a, b) => (a.createdAt?.seconds || 0) - (b.createdAt?.seconds || 0));
+        } else if (sortBy === 'price-low') {
+            result.sort((a, b) => (a.priceNum || 0) - (b.priceNum || 0));
+        } else if (sortBy === 'price-high') {
+            result.sort((a, b) => (b.priceNum || 0) - (a.priceNum || 0));
+        } else if (sortBy === 'name') {
+            result.sort((a, b) => a.title.localeCompare(b.title));
+        }
+
+        return result;
+    }, [allProducts, filterCategory, sortBy]);
+
     return (
-        <div className="w-full min-h-screen bg-gray-50 pt-20">
+        <div className="w-full min-h-screen bg-gray-50 pt-28">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                 <div className="mb-8 flex justify-between items-center">
                     <h1 className="text-3xl font-classic font-bold text-gray-900">Admin Dashboard</h1>
@@ -94,8 +128,33 @@ const AdminDashboard = () => {
 
                 {/* Recent Activity Table */}
                 <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div className="px-6 py-4 border-b border-gray-100 bg-gray-50">
-                        <h2 className="text-lg font-semibold text-gray-800">Recent Product Activity</h2>
+                    <div className="px-6 py-4 border-b border-gray-100 bg-gray-50 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                        <h2 className="text-lg font-semibold text-gray-800">Manage Products</h2>
+                        
+                        <div className="flex flex-wrap gap-3">
+                            <select 
+                                value={filterCategory} 
+                                onChange={(e) => setFilterCategory(e.target.value)}
+                                className="border border-gray-300 rounded px-3 py-1.5 text-sm bg-white outline-none focus:ring-1 focus:ring-amber-500"
+                            >
+                                <option value="All">All Categories</option>
+                                {CATEGORIES.map(cat => (
+                                    <option key={cat} value={cat}>{cat}</option>
+                                ))}
+                            </select>
+
+                            <select 
+                                value={sortBy} 
+                                onChange={(e) => setSortBy(e.target.value)}
+                                className="border border-gray-300 rounded px-3 py-1.5 text-sm bg-white outline-none focus:ring-1 focus:ring-amber-500"
+                            >
+                                <option value="newest">Newest First</option>
+                                <option value="oldest">Oldest First</option>
+                                <option value="price-low">Price: Low to High</option>
+                                <option value="price-high">Price: High to Low</option>
+                                <option value="name">Name: A-Z</option>
+                            </select>
+                        </div>
                     </div>
                     <div className="overflow-x-auto">
                         <table className="w-full text-left">
@@ -108,7 +167,7 @@ const AdminDashboard = () => {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-100">
-                                {stats.recentUploads.map((product) => (
+                                {filteredAndSortedProducts.map((product) => (
                                     <tr key={product.id} className="hover:bg-gray-50 transition-colors">
                                         <td className="px-6 py-4">
                                             <div className="flex items-center">
@@ -125,7 +184,7 @@ const AdminDashboard = () => {
                                         </td>
                                     </tr>
                                 ))}
-                                {stats.recentUploads.length === 0 && !loading && (
+                                {filteredAndSortedProducts.length === 0 && !loading && (
                                     <tr>
                                         <td colSpan="4" className="px-6 py-10 text-center text-gray-500">
                                             No products uploaded yet.

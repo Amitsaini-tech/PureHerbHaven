@@ -3,12 +3,13 @@ import { db } from '../firebase';
 import { collection, getDocs, query, limit } from 'firebase/firestore';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { CATEGORIES } from '../utils/constants';
 import video from "../image/video.mp4"
 
 const MidContainer = () => {
   const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState(['Skincare', 'Haircare', 'Makeup', 'Fragrances']);
-  const [selectedCategory, setSelectedCategory] = useState('Skincare');
+  const [categories, setCategories] = useState([...CATEGORIES.slice(0, 4), 'Shop all']);
+  const [selectedCategory, setSelectedCategory] = useState(CATEGORIES[0]);
   const [loading, setLoading] = useState(true);
   const { addToCart } = useCart();
 
@@ -16,7 +17,7 @@ const MidContainer = () => {
     const fetchProducts = async () => {
       setLoading(true);
       try {
-        const querySnapshot = await getDocs(query(collection(db, "products"), limit(20)));
+        const querySnapshot = await getDocs(query(collection(db, "products"), limit(100)));
         const productsData = querySnapshot.docs.map(doc => ({
           id: doc.id,
           ...doc.data()
@@ -40,7 +41,21 @@ const MidContainer = () => {
     setSelectedCategory(category);
   };
 
-  const filteredProducts = products.filter(p => p.categories === selectedCategory);
+  const filteredProducts = products.filter(p => {
+    const pCat = p.categories?.toLowerCase() || '';
+    const selCat = selectedCategory.toLowerCase();
+    
+    if (selCat === 'shop all') {
+      return true; // Show everything
+    }
+    if (selCat === 'skincare') {
+      return pCat === 'skincare' || pCat === 'skin';
+    }
+    if (selCat === 'haircare') {
+      return pCat === 'haircare' || pCat === 'hair';
+    }
+    return pCat === selCat;
+  });
 
   return (
     <div className="w-full max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-12">

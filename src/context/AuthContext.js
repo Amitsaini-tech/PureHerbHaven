@@ -9,6 +9,11 @@ import {
 } from 'firebase/auth';
 import { auth, googleProvider, microsoftProvider } from '../firebase';
 
+const ADMIN_EMAILS = [
+    'sainiamit3464@gmail.com',
+    'testadmin_jetski@example.com'
+];
+
 const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);
@@ -30,7 +35,8 @@ export const AuthProvider = ({ children }) => {
                     name: currentUser.displayName || currentUser.email.split('@')[0],
                     email: currentUser.email,
                     initials: initials,
-                    photoURL: currentUser.photoURL
+                    photoURL: currentUser.photoURL,
+                    isAdmin: ADMIN_EMAILS.includes(currentUser.email)
                 });
             } else {
                 setUser(null);

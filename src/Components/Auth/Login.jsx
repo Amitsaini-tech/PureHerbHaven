@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import Footer from '../Footer';
 import { FcGoogle } from 'react-icons/fc';
@@ -12,6 +12,8 @@ const Login = () => {
     const [loading, setLoading] = useState(false);
     const { login, loginWithGoogle, loginWithMicrosoft } = useAuth();
     const navigate = useNavigate();
+    const location = useLocation();
+    const from = location.state?.from?.pathname || '/';
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -19,7 +21,7 @@ const Login = () => {
         setLoading(true);
         try {
             await login(email, password);
-            navigate('/');
+            navigate(from, { replace: true });
         } catch (err) {
             setError('Failed to log in: ' + err.message);
         } finally {
@@ -31,7 +33,7 @@ const Login = () => {
         setError('');
         try {
             await loginWithGoogle();
-            navigate('/');
+            navigate(from, { replace: true });
         } catch (err) {
             setError('Google login failed: ' + err.message);
         }
@@ -41,7 +43,7 @@ const Login = () => {
         setError('');
         try {
             await loginWithMicrosoft();
-            navigate('/');
+            navigate(from, { replace: true });
         } catch (err) {
             setError('Microsoft login failed: ' + err.message);
         }

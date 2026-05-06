@@ -3,15 +3,16 @@ import { motion } from 'framer-motion';
 import { db } from '../../firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import Footer from '../Footer';
+import { CATEGORIES, FINISHES, SKIN_TYPES } from '../../utils/constants';
 
 const ProductUpload = () => {
     const [formData, setFormData] = useState({
         title: '',
         price: '',
         highlight: '',
-        category: 'Skincare',
-        finish: 'Matte',
-        skintype: 'All',
+        category: CATEGORIES[0],
+        finish: FINISHES[0],
+        skintype: SKIN_TYPES[0],
         imgsrc: '',
         description: ''
     });
@@ -134,10 +135,9 @@ const ProductUpload = () => {
                                     name="category" value={formData.category} onChange={handleChange}
                                     className="w-full border-gray-300 rounded-md shadow-sm focus:ring-amber-500 focus:border-amber-500 border p-2.5 outline-none bg-white"
                                 >
-                                    <option value="Skincare">Skincare</option>
-                                    <option value="Haircare">Haircare</option>
-                                    <option value="Makeup">Makeup</option>
-                                    <option value="Fragrances">Fragrances</option>
+                                    {CATEGORIES.map(cat => (
+                                        <option key={cat} value={cat}>{cat}</option>
+                                    ))}
                                 </select>
                             </div>
 
@@ -148,10 +148,9 @@ const ProductUpload = () => {
                                     name="finish" value={formData.finish} onChange={handleChange}
                                     className="w-full border-gray-300 rounded-md shadow-sm focus:ring-amber-500 focus:border-amber-500 border p-2.5 outline-none bg-white"
                                 >
-                                    <option value="Matte">Matte</option>
-                                    <option value="Glossy">Glossy</option>
-                                    <option value="Luminous">Luminous</option>
-                                    <option value="Natural">Natural</option>
+                                    {FINISHES.map(f => (
+                                        <option key={f} value={f}>{f}</option>
+                                    ))}
                                 </select>
                             </div>
 
@@ -162,11 +161,9 @@ const ProductUpload = () => {
                                     name="skintype" value={formData.skintype} onChange={handleChange}
                                     className="w-full border-gray-300 rounded-md shadow-sm focus:ring-amber-500 focus:border-amber-500 border p-2.5 outline-none bg-white"
                                 >
-                                    <option value="All">All Skin Types</option>
-                                    <option value="Oily">Oily</option>
-                                    <option value="Dry">Dry</option>
-                                    <option value="Combination">Combination</option>
-                                    <option value="Normal">Normal</option>
+                                    {SKIN_TYPES.map(s => (
+                                        <option key={s} value={s}>{s === 'All' ? 'All Skin Types' : s}</option>
+                                    ))}
                                 </select>
                             </div>
                         </div>

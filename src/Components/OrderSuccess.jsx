@@ -1,16 +1,12 @@
 
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { BsCheckCircleFill } from 'react-icons/bs';
 import Footer from './Footer';
 
 const OrderSuccess = () => {
-    const [orderId, setOrderId] = useState('');
-
-    useEffect(() => {
-        // Generate a random order ID like ORD-123456789
-        setOrderId(`ORD-${Math.floor(Math.random() * 1000000000)}`);
-    }, []);
+    const location = useLocation();
+    const orderId = location.state?.orderId || `ORD-${Math.floor(Math.random() * 1000000000)}`;
 
     return (
         <div className="w-full min-h-screen pt-24 bg-gray-50 flex flex-col">

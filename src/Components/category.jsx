@@ -9,10 +9,9 @@ const Category = () => {
         { name: "bath & body", path: "/category/bath-body" },
         { name: "haircare", path: "/category/haircare" },
         { name: "pure fragrances", path: "/category/pure-fragrances" },
-        { name: "skin", path: "/category/skin" },
-        { name: "hair", path: "/category/hair" },
         { name: "combo box", path: "/category/combo-box" },
-        { name: "mega sale", path: "/category/mega-sale" }
+        { name: "mega sale", path: "/category/mega-sale" },
+        { name: "shop all", path: "/category/shop-all" }
     ];
 
     return (

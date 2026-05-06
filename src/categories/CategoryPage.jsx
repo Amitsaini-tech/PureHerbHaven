@@ -5,6 +5,7 @@ import { collection, getDocs } from 'firebase/firestore';
 import { MdOutlineKeyboardArrowDown, MdOutlineKeyboardArrowUp } from "react-icons/md";
 import { useCart } from '../context/CartContext';
 import Footer from '../Components/Footer';
+import { CATEGORIES, FINISHES, SKIN_TYPES } from '../utils/constants';
 
 // A reusable accordion filter section component
 const FilterSection = ({ title, options, selectedOptions = [], onChange }) => {
@@ -75,12 +76,9 @@ const CategoryPage = () => {
 
     // Filter Options
     const filterOptions = {
-        categories: ['Skincare', 'Haircare', 'Makeup', 'Fragrances'],
-        finish: ['Matte', 'Glossy', 'Luminous', 'Natural'],
-        coverage: ['Light', 'Medium', 'Full'],
-        skinTone: ['Fair', 'Medium', 'Deep'],
-        formulation: ['Liquid', 'Cream', 'Powder', 'Serum'],
-        skintype: ['Oily', 'Dry', 'Combination', 'Normal'],
+        categories: CATEGORIES,
+        finish: FINISHES,
+        skintype: SKIN_TYPES,
         preference: ['Vegan', 'Cruelty Free', 'Organic', 'Paraben Free']
     };
 
@@ -105,7 +103,17 @@ const CategoryPage = () => {
 
         // Apply URL category filter if present
         if (categoryName) {
-            result = result.filter(p => p.categories?.toLowerCase() === categoryName.toLowerCase());
+            const urlCat = categoryName.toLowerCase();
+            if (urlCat !== 'shop-all') {
+                result = result.filter(p => {
+                    const pCat = p.categories?.toLowerCase() || '';
+                    if (urlCat === 'skincare') return pCat === 'skincare' || pCat === 'skin';
+                    if (urlCat === 'haircare') return pCat === 'haircare' || pCat === 'hair';
+                    
+                    // Default slug matching
+                    return pCat.replace(/ & /g, '-').replace(/ /g, '-') === urlCat;
+                });
+            }
         }
 
         // Apply sidebar filters
@@ -115,9 +123,16 @@ const CategoryPage = () => {
                 result = result.filter(product => {
                     const productValue = product[filterKey];
                     if (!productValue) return false; 
-                    return selectedOptions.some(option => 
-                        productValue.toString().toLowerCase() === option.toLowerCase()
-                    );
+                    
+                    const pValue = productValue.toString().toLowerCase();
+                    return selectedOptions.some(option => {
+                        const opt = option.toLowerCase();
+                        if (filterKey === 'categories') {
+                            if (opt === 'skincare') return pValue === 'skincare' || pValue === 'skin';
+                            if (opt === 'haircare') return pValue === 'haircare' || pValue === 'hair';
+                        }
+                        return pValue === opt;
+                    });
                 });
             }
         });
@@ -145,19 +160,18 @@ const CategoryPage = () => {
 
             <div className="w-full flex-1 flex flex-col md:flex-row max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 
-                {/* Sidebar - Filters */}
-                <aside className="w-full md:w-64 flex-shrink-0 md:mr-8 mb-8 md:mb-0">
-                    <h2 className="text-xl font-classic font-semibold mb-6">Filters</h2>
-                    <div className="bg-white rounded-lg sticky top-32">
-                        <FilterSection title="Categories" options={filterOptions.categories} selectedOptions={selectedFilters.categories} onChange={handleFilterChange} />
-                        <FilterSection title="Finish" options={filterOptions.finish} selectedOptions={selectedFilters.finish} onChange={handleFilterChange} />
-                        <FilterSection title="Coverage" options={filterOptions.coverage} selectedOptions={selectedFilters.coverage} onChange={handleFilterChange} />
-                        <FilterSection title="Skin Tone" options={filterOptions.skinTone} selectedOptions={selectedFilters.skintone} onChange={handleFilterChange} />
-                        <FilterSection title="Formulation" options={filterOptions.formulation} selectedOptions={selectedFilters.formulation} onChange={handleFilterChange} />
-                        <FilterSection title="Skin Type" options={filterOptions.skintype} selectedOptions={selectedFilters.skintype} onChange={handleFilterChange} />
-                        <FilterSection title="Preference" options={filterOptions.preference} selectedOptions={selectedFilters.preference} onChange={handleFilterChange} />
-                    </div>
-                </aside>
+                {/* Sidebar - Filters (Only visible on Shop All) */}
+                {categoryName === 'shop-all' && (
+                    <aside className="w-full md:w-64 flex-shrink-0 md:mr-8 mb-8 md:mb-0 animate-fade-in">
+                        <h2 className="text-xl font-classic font-semibold mb-6">Filters</h2>
+                        <div className="bg-white rounded-lg sticky top-32">
+                            <FilterSection title="Categories" options={filterOptions.categories} selectedOptions={selectedFilters.categories} onChange={handleFilterChange} />
+                            <FilterSection title="Finish" options={filterOptions.finish} selectedOptions={selectedFilters.finish} onChange={handleFilterChange} />
+                            <FilterSection title="Skin Type" options={filterOptions.skintype} selectedOptions={selectedFilters.skintype} onChange={handleFilterChange} />
+                            <FilterSection title="Preference" options={filterOptions.preference} selectedOptions={selectedFilters.preference} onChange={handleFilterChange} />
+                        </div>
+                    </aside>
+                )}
 
                 {/* Main Content */}
                 <main className="flex-1 flex flex-col">
