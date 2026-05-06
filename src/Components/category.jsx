@@ -22,9 +22,9 @@ const Category = () => {
                 </span>
             </div>
             
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
+            <div className="flex flex-wrap justify-center gap-4 md:gap-6">
                 {categories.map((cat, index) => (
-                    <Link key={index} to={cat.path} className="block w-full">
+                    <Link key={index} to={cat.path} className="w-[calc(50%-1rem)] sm:w-[calc(33.33%-1.5rem)] md:w-[calc(25%-2rem)] lg:w-[calc(20%-2.5rem)]">
                         <motion.div 
                             whileHover={{ scale: 1.05 }} 
                             whileTap={{ scale: 0.95 }}
