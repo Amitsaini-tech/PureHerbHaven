@@ -32,27 +32,27 @@ const Homecontainer = () => {
     };
 
     return (
-        <div className="w-full h-full pt-[40px] md:pt-[50px]">
+        <div className="w-full h-full">
             {/* Slider */}
-            <div className="relative w-full h-[60vh] md:h-[70vh] lg:h-[80vh] overflow-hidden group">
+            <div className="relative w-full h-[35vh] sm:h-[45vh] md:h-[60vh] lg:h-[75vh] xl:h-[85vh] overflow-hidden group">
                 {images.map((image, index) => (
                     <div
                         key={index}
                         className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === currentIndex ? 'opacity-100' : 'opacity-0'}`}
                     >
-                        <img src={image} alt={`Slide ${index}`} className="w-full h-full object-cover object-center" />
+                        <img src={image} alt={`Slide ${index}`} className="w-full h-full object-cover object-center md:object-top lg:object-center" />
                     </div>
                 ))}
                 
                 {/* Navigation Buttons - Visible on Hover for Desktop */}
                 <button
-                    className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/30 hover:bg-black/60 text-white text-2xl p-3 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 backdrop-blur-sm"
+                    className="absolute left-2 md:left-4 top-1/2 transform -translate-y-1/2 bg-black/30 hover:bg-black/60 text-white text-xl md:text-2xl p-2 md:p-3 rounded-full opacity-0 md:group-hover:opacity-100 transition-all duration-300 backdrop-blur-sm z-10"
                     onClick={prevSlide}
                 >
                     <GoArrowLeft />
                 </button>
                 <button
-                    className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/30 hover:bg-black/60 text-white text-2xl p-3 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 backdrop-blur-sm"
+                    className="absolute right-2 md:right-4 top-1/2 transform -translate-y-1/2 bg-black/30 hover:bg-black/60 text-white text-xl md:text-2xl p-2 md:p-3 rounded-full opacity-0 md:group-hover:opacity-100 transition-all duration-300 backdrop-blur-sm z-10"
                     onClick={nextSlide}
                 >
                     <GoArrowRight />

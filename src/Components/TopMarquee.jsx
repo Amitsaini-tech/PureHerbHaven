@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 
 const TopMarquee = () => {
     return (
-        <div className="w-full bg-amber-800 text-white py-2 overflow-hidden flex whitespace-nowrap fixed top-0 z-40">
+        <div className="w-full bg-amber-800 text-white py-2 overflow-hidden flex whitespace-nowrap fixed top-0 z-[100]">
             <motion.div
                 initial={{ x: "0%" }}
                 animate={{ x: "-100%" }}
