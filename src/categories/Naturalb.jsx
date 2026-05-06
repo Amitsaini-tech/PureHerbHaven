@@ -1,6 +1,9 @@
 import React from 'react';
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import image1 from "../image/shetty.webp";
+import { list } from '../utils/data';
+import { Link } from 'react-router-dom';
+import Footer from '../Components/Footer'
 
 const Naturalb = () => {
     return (
@@ -39,24 +42,28 @@ const Naturalb = () => {
                         <span className="mx-2"><MdOutlineKeyboardArrowDown /></span>
                     </p>
                 </div>
-                <div className="w-full h-full my-10 mx-3 flex">
-                    <div className="w-[15rem]  h-[23rem] flex flex-col items-center justify-start m-2">
-                        <img src={image1} className="w-[15rem] h-[15rem]" alt="" />
-                        <span className="text-md font-light my-2 capitalize">title</span>
-                        <span className="text-[12px] font-normal text-orange-700 capitalize">Highlight</span>
-                        <span className="text-lg font-mono my-2">Price</span>
-                        <button
+                <div className="w-full h-full my-10 mx-3 grid grid-rows-2 grid-cols-4 gap-8">
+                    {list && list.map((n)=>(
+                      <div key={n.id} className="w-[17rem]  h-[22rem] flex flex-col items-center justify-start m-2">
+                        <img src={n.imgsrc} className="w-[16rem] h-[17rem]" alt="" />
+                        <span className="text-sm font-light my-2 capitalize">{n.title}</span>
+                        <span className="text-[10px] font-normal text-orange-700 capitalize">{n.Highlight}</span>
+                        <span className="text-lg font-mono my-2">{n.Price}</span>
+                       <Link to={n.path} ><button
                             type="button"
                             className="w-[15rem] bg-red-200 hover:bg-red-300 h-10 font-mono"
                         >
                             Add to cart
-                        </button>
-                    </div>
+                        </button></Link> 
+                    </div>  
+                    ))}
+                    
                     
                     
 
                 </div>
             </div>
+            <Footer/>
         </div>
     );
 }

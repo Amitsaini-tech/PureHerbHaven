@@ -1,57 +1,126 @@
-import React, { useState } from 'react';
-import { categories } from '../utils/data';
+import React, { useState, useEffect } from 'react';
+import { db } from '../firebase';
+import { collection, getDocs, query, limit } from 'firebase/firestore';
 import { Link } from 'react-router-dom';
+import { useCart } from '../context/CartContext';
 import video from "../image/video.mp4"
 
 const MidContainer = () => {
-  const [selectedSub, setSelectedSub] = useState(categories[0].sub);
+  const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState(['Skincare', 'Haircare', 'Makeup', 'Fragrances']);
+  const [selectedCategory, setSelectedCategory] = useState('Skincare');
+  const [loading, setLoading] = useState(true);
+  const { addToCart } = useCart();
 
-  const handleSubClick = (sub) => {
-    setSelectedSub(sub);
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoading(true);
+      try {
+        const querySnapshot = await getDocs(query(collection(db, "products"), limit(20)));
+        const productsData = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setProducts(productsData);
+        
+        // Extract unique categories if needed, but let's stick to defaults for now
+        // const uniqueCategories = [...new Set(productsData.map(p => p.categories))];
+        // if (uniqueCategories.length > 0) setCategories(uniqueCategories);
+      } catch (error) {
+        console.error("Error fetching products: ", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  const handleCategoryClick = (category) => {
+    setSelectedCategory(category);
   };
 
+  const filteredProducts = products.filter(p => p.categories === selectedCategory);
+
   return (
-    <div>
-      <div className="grid grid-cols-3">
-        {categories.map(({ sub }) => (
-          <div
-            key={sub}
-            className="w-full h-full flex items-center justify-center my-5 py-3 px-5 cursor-pointer"
-            onClick={() => handleSubClick(sub)}
+    <div className="w-full max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      {/* Category Tabs */}
+      <div className="flex flex-wrap justify-center items-center gap-2 md:gap-4 mb-10 border-b border-gray-200">
+        {categories.map((category) => (
+          <button
+            key={category}
+            className={`py-3 px-4 md:px-6 text-lg md:text-xl font-medium font-classic transition-colors relative ${selectedCategory === category ? 'text-amber-800' : 'text-gray-500 hover:text-gray-900'}`}
+            onClick={() => handleCategoryClick(category)}
           >
-            <span className="text-2xl font-medium">{sub}</span>
-          </div>
+            {category}
+            {selectedCategory === category && (
+              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-amber-800"></span>
+            )}
+          </button>
         ))}
       </div>
 
-      <div className=" w-full flex flex-row flex-wrap items-center justify-start gap-1 my-5 py-3 px-4">
-        {categories
-          .filter((category) => category.sub === selectedSub)
-          .flatMap((category) => category.posts)
-          .map((post) => (
-            <div
-              key={post.id}
-              className="w-[21rem]  h-[36rem] flex flex-col items-center justify-start m-2"
-            >
-              <img src={post.imgsrc} alt="" className="w-[22rem] h-[29rem]" />
-              <span className="text-md font-light my-2 capitalize">{post.title}</span>
-              <span className="text-[12px] font-normal text-orange-700 capitalize">{post.Highlight}</span>
-              <span className="text-lg font-mono my-2">{post.Price}</span>
-              <br />
-              <Link to={post.path}>
-              <button
-                type="button"
-                className="w-[21rem] bg-red-200 hover:bg-red-300 h-10 font-mono"
+      {/* Product Grid */}
+      {loading ? (
+        <div className="flex justify-center py-20">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-amber-800"></div>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+          {filteredProducts.length > 0 ? (
+            filteredProducts.map((post) => (
+              <div
+                key={post.id}
+                className="group flex flex-col bg-white rounded-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100"
               >
-                Add to cart
-              </button>
-              </Link>
+                <Link to={`/product/${post.id}`} className="relative aspect-[3/4] overflow-hidden block bg-gray-50">
+                  <img 
+                    src={post.imgsrc} 
+                    alt={post.title} 
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                  />
+                </Link>
+                
+                <div className="p-4 flex flex-col flex-1">
+                  <h3 className="text-sm font-medium line-clamp-2 min-h-[2.5rem] mb-1">
+                    <Link to={`/product/${post.id}`} className="hover:text-amber-700 transition-colors">
+                      {post.title}
+                    </Link>
+                  </h3>
+                  <p className="text-xs text-amber-700 capitalize mb-3 line-clamp-1">{post.Highlight}</p>
+                  
+                  <div className="mt-auto flex items-center justify-between">
+                    <span className="text-lg font-semibold">{post.Price}</span>
+                  </div>
+                  
+                  <button
+                    onClick={() => addToCart(post)}
+                    className="w-full mt-4 bg-gray-900 hover:bg-amber-800 text-white py-2 rounded transition-colors font-medium text-sm flex items-center justify-center gap-2"
+                  >
+                    Add to cart
+                  </button>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="col-span-full text-center py-12 text-gray-500">
+              No products found in this category.
             </div>
-          ))}
+          )}
+        </div>
+      )}
 
-      </div>
-      <div>
-        <video src={video} autoPlay="true" loop="true" className="my-5 py-3 px-5"/>
+      {/* Video Section */}
+      <div className="w-full rounded-2xl overflow-hidden shadow-lg mt-12 bg-black aspect-video relative">
+        <video 
+          src={video} 
+          autoPlay 
+          muted 
+          loop 
+          playsInline
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-black/20 pointer-events-none"></div>
       </div>
     </div>
   );

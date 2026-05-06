@@ -9,13 +9,12 @@ import lipsticks from "../image/web_Lipstick.webp"
 import mid_year from "../image/mid_year.webp"
 import web_bed from "../image/web_bed.webp"
 import { GoArrowLeft, GoArrowRight } from "react-icons/go";
+import { motion } from "framer-motion";
 
-
-
-const images = [sandalwood, summer, herbal, lipsticks, mid_year, web_bed]
+const images = [sandalwood, summer, herbal, lipsticks, mid_year, web_bed];
 
 const Homecontainer = () => {
-    const [currentIndex, setcurrentIndex] = useState(0)
+    const [currentIndex, setcurrentIndex] = useState(0);
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -33,32 +32,47 @@ const Homecontainer = () => {
     };
 
     return (
-        <div className="w-full h-full">
-            <div className="relative w-full h-[31rem] overflow-hidden">
+        <div className="w-full h-full pt-[40px] md:pt-[50px]">
+            {/* Slider */}
+            <div className="relative w-full h-[60vh] md:h-[70vh] lg:h-[80vh] overflow-hidden group">
                 {images.map((image, index) => (
                     <div
                         key={index}
-                        className={`absolute w-full h-full transition-opacity duration-1000 ease-in-out ${index === currentIndex ? 'opacity-100' : 'opacity-0'
-                            }`}
+                        className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === currentIndex ? 'opacity-100' : 'opacity-0'}`}
                     >
-                        <img src={image} alt={`Slide ${index}`} className="w-full h-full object-cover" />
+                        <img src={image} alt={`Slide ${index}`} className="w-full h-full object-cover object-center" />
                     </div>
                 ))}
+                
+                {/* Navigation Buttons - Visible on Hover for Desktop */}
                 <button
-                    className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-300/30 bg-opacity-50 hover:bg-opacity-100 text-white text-2xl px-4 py-2 rounded-full"
+                    className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/30 hover:bg-black/60 text-white text-2xl p-3 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 backdrop-blur-sm"
                     onClick={prevSlide}
                 >
                     <GoArrowLeft />
                 </button>
                 <button
-                    className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-300/30 bg-opacity-50 hover:bg-opacity-100 text-white text-2xl px-4 py-2 rounded-full"
+                    className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/30 hover:bg-black/60 text-white text-2xl p-3 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 backdrop-blur-sm"
                     onClick={nextSlide}
                 >
                     <GoArrowRight />
                 </button>
+
+                {/* Indicators */}
+                <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                    {images.map((_, index) => (
+                        <button
+                            key={index}
+                            onClick={() => setcurrentIndex(index)}
+                            className={`w-2.5 h-2.5 rounded-full transition-all ${index === currentIndex ? 'bg-white w-8' : 'bg-white/50 hover:bg-white/80'}`}
+                        />
+                    ))}
+                </div>
             </div>
-            <Midcontainer/>
+            
+            <Midcontainer />
         </div>
     );
 }
+
 export default Homecontainer;

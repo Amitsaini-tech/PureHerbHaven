@@ -3,27 +3,38 @@ import { motion } from "framer-motion"
 import { Link } from 'react-router-dom'
 
 const Category = () => {
+    const categories = [
+        { name: "natural makeup", path: "/category/natural-makeup" },
+        { name: "skincare", path: "/category/skincare" },
+        { name: "bath & body", path: "/category/bath-body" },
+        { name: "haircare", path: "/category/haircare" },
+        { name: "pure fragrances", path: "/category/pure-fragrances" },
+        { name: "skin", path: "/category/skin" },
+        { name: "hair", path: "/category/hair" },
+        { name: "combo box", path: "/category/combo-box" },
+        { name: "mega sale", path: "/category/mega-sale" }
+    ];
+
     return (
-        <div className="mx-5">
-            <span className="flex justify-center items-center capitalize text-4xl font-serif  font-medium bg-clip-text text-transparent bg-gradient-to-r from-amber-600/50 to-amber-700">shop by category</span>
-            <div className="w-full m-10 ">
-                < p className="flex items-center justify-center">
-                <Link to={"/Naturalb"}>
-                    <motion.span whileHover={{ scale: 1.2 }} id='Naturally' className=" flex items-center justify-center w-[15rem] h-10 bg-gray-50/30 shadow-lg drop-shadow-md  rounded-xl m-5 text-lg capitalize font-sans font-medium cursor-pointer hover:bg-rose-400 hover:text-gray-100">
-                        natural makeup</motion.span></Link>
-                    <motion.span whileHover={{ scale: 1.2 }} className=" flex items-center justify-center w-[15rem] h-10 bg-gray-50/30 shadow-lg drop-shadow-md  rounded-xl m-5 text-lg capitalize font-sans font-medium cursor-pointer hover:bg-rose-400 hover:text-gray-100">skincare </motion.span>
-                    <motion.span whileHover={{ scale: 1.2 }} className=" flex items-center justify-center w-[15rem] h-10 bg-gray-50/30 shadow-lg drop-shadow-md  rounded-xl m-5 text-lg capitalize font-sans font-medium cursor-pointer hover:bg-rose-400 hover:text-gray-100">bath & body</motion.span>
-                </p>
-                <p className="flex items-center justify-center">
-                    <motion.span whileHover={{ scale: 1.2 }} className=" flex items-center justify-center w-[15rem] h-10 bg-gray-50/30 shadow-lg drop-shadow-md  rounded-xl m-5 text-lg capitalize font-sans font-medium cursor-pointer hover:bg-rose-400 hover:text-gray-100">haircare</motion.span>
-                    <motion.span whileHover={{ scale: 1.2 }} className=" flex items-center justify-center w-[15rem] h-10 bg-gray-50/30 shadow-lg drop-shadow-md  rounded-xl m-5 text-lg capitalize font-sans font-medium cursor-pointer hover:bg-rose-400 hover:text-gray-100">pure fragrances </motion.span>
-                    <motion.span whileHover={{ scale: 1.2 }} className=" flex items-center justify-center w-[15rem] h-10 bg-gray-50/30 shadow-lg drop-shadow-md  rounded-xl m-5 text-lg capitalize font-sans font-medium cursor-pointer hover:bg-rose-400 hover:text-gray-100">skin</motion.span>
-                    <motion.span whileHover={{ scale: 1.2 }} className=" flex items-center justify-center w-[15rem] h-10 bg-gray-50/30 shadow-lg drop-shadow-md  rounded-xl m-5 text-lg capitalize font-sans font-medium cursor-pointer hover:bg-rose-400 hover:text-gray-100">hair</motion.span>
-                </p>
-                <p className="flex items-center justify-center">
-                    <motion.span whileHover={{ scale: 1.2 }} className=" flex items-center justify-center w-[15rem] h-10 bg-gray-50/30 shadow-lg drop-shadow-md  rounded-xl m-5 text-lg capitalize font-sans font-medium cursor-pointer hover:bg-rose-400 hover:text-gray-100">combo box</motion.span>
-                    <motion.span whileHover={{ scale: 1.2 }} className=" flex items-center justify-center w-[15rem] h-10 bg-gray-50/30 shadow-lg drop-shadow-md  rounded-xl m-5 text-lg capitalize font-sans font-medium cursor-pointer hover:bg-rose-400 hover:text-gray-100">mega sale</motion.span>
-                </p>
+        <div className="w-full max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div className="text-center mb-12">
+                <span className="capitalize text-3xl md:text-4xl font-classic font-semibold bg-clip-text text-transparent bg-gradient-to-r from-amber-600 to-amber-900">
+                    Shop by Category
+                </span>
+            </div>
+            
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
+                {categories.map((cat, index) => (
+                    <Link key={index} to={cat.path} className="block w-full">
+                        <motion.div 
+                            whileHover={{ scale: 1.05 }} 
+                            whileTap={{ scale: 0.95 }}
+                            className="w-full h-16 sm:h-20 bg-amber-50 shadow-sm border border-amber-100 rounded-xl flex items-center justify-center text-sm sm:text-base capitalize font-sans font-medium cursor-pointer hover:bg-amber-700 hover:text-white transition-colors duration-300 px-2 text-center text-amber-900"
+                        >
+                            {cat.name}
+                        </motion.div>
+                    </Link>
+                ))}
             </div>
         </div>
     )
