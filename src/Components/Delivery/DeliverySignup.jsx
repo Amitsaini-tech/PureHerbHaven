@@ -1,29 +1,26 @@
 import React, { useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import Footer from '../Footer';
 
-const Signup = () => {
+const DeliverySignup = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [role, setRole] = useState('buyer');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const { signup } = useAuth();
     const navigate = useNavigate();
-    const location = useLocation();
-    const from = location.state?.from?.pathname || '/';
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
         setLoading(true);
         try {
-            await signup(email, password, name, role);
-            navigate(from, { replace: true });
+            await signup(email, password, name, 'delivery');
+            navigate('/delivery', { replace: true });
         } catch (err) {
-            setError('Failed to create an account: ' + err.message);
+            setError('Failed to create account: ' + err.message);
         } finally {
             setLoading(false);
         }
@@ -34,12 +31,12 @@ const Signup = () => {
             <div className="flex-1 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
                 <div className="sm:mx-auto sm:w-full sm:max-w-md">
                     <h2 className="mt-6 text-center text-3xl font-classic font-bold text-gray-900">
-                        Create your account
+                        Join as a Delivery Partner
                     </h2>
                     <p className="mt-2 text-center text-sm text-gray-600">
-                        Or{' '}
-                        <Link to="/login" className="font-medium text-amber-700 hover:text-amber-600">
-                            sign in to your existing account
+                        Already a partner?{' '}
+                        <Link to="/deliver/login" className="font-medium text-blue-700 hover:text-blue-600">
+                            Sign in here
                         </Link>
                     </p>
                 </div>
@@ -65,7 +62,7 @@ const Signup = () => {
                                         required
                                         value={name}
                                         onChange={(e) => setName(e.target.value)}
-                                        className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-amber-500 focus:border-amber-500 sm:text-sm"
+                                        className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                                     />
                                 </div>
                             </div>
@@ -83,7 +80,7 @@ const Signup = () => {
                                         required
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
-                                        className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-amber-500 focus:border-amber-500 sm:text-sm"
+                                        className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                                     />
                                 </div>
                             </div>
@@ -101,38 +98,8 @@ const Signup = () => {
                                         required
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
-                                        className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-amber-500 focus:border-amber-500 sm:text-sm"
+                                        className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                                     />
-                                </div>
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
-                                    I am a...
-                                </label>
-                                <div className="flex gap-4">
-                                    <label className="flex items-center">
-                                        <input
-                                            type="radio"
-                                            name="role"
-                                            value="buyer"
-                                            checked={role === 'buyer'}
-                                            onChange={(e) => setRole(e.target.value)}
-                                            className="h-4 w-4 text-amber-600 focus:ring-amber-500 border-gray-300"
-                                        />
-                                        <span className="ml-2 text-sm text-gray-700">Buyer</span>
-                                    </label>
-                                    <label className="flex items-center">
-                                        <input
-                                            type="radio"
-                                            name="role"
-                                            value="seller"
-                                            checked={role === 'seller'}
-                                            onChange={(e) => setRole(e.target.value)}
-                                            className="h-4 w-4 text-amber-600 focus:ring-amber-500 border-gray-300"
-                                        />
-                                        <span className="ml-2 text-sm text-gray-700">Seller</span>
-                                    </label>
                                 </div>
                             </div>
 
@@ -142,13 +109,10 @@ const Signup = () => {
                                     name="terms"
                                     type="checkbox"
                                     required
-                                    className="h-4 w-4 text-amber-600 focus:ring-amber-500 border-gray-300 rounded"
+                                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                                 />
                                 <label htmlFor="terms" className="ml-2 block text-sm text-gray-900">
-                                    I agree to the{' '}
-                                    <a href="#" className="font-medium text-amber-700 hover:text-amber-600">
-                                        Terms and Conditions
-                                    </a>
+                                    I agree to the Terms and Conditions
                                 </label>
                             </div>
 
@@ -156,9 +120,9 @@ const Signup = () => {
                                 <button
                                     type="submit"
                                     disabled={loading}
-                                    className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-amber-800 hover:bg-amber-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 transition-colors disabled:opacity-50"
+                                    className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-amber-500 hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 transition-colors disabled:opacity-50"
                                 >
-                                    {loading ? 'Creating account...' : 'Create account'}
+                                    {loading ? 'Creating account...' : 'Apply Now'}
                                 </button>
                             </div>
                         </form>
@@ -170,4 +134,4 @@ const Signup = () => {
     );
 };
 
-export default Signup;
+export default DeliverySignup;

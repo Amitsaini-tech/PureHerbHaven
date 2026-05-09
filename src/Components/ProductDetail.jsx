@@ -109,6 +109,13 @@ const ProductDetail = () => {
                             </span>
                         </div>
 
+                        {/* Seller Info */}
+                        {product.sellerName && (
+                            <div className="mb-4 text-sm text-gray-600">
+                                Sold by: <span className="font-semibold text-amber-800">{product.sellerName}</span>
+                            </div>
+                        )}
+
                         {/* Price */}
                         <div className="mb-6">
                             <span className="text-3xl font-bold text-gray-900">{product.Price}</span>

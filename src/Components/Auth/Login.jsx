@@ -4,6 +4,8 @@ import { useAuth } from '../../context/AuthContext';
 import Footer from '../Footer';
 import { FcGoogle } from 'react-icons/fc';
 import { FaMicrosoft } from 'react-icons/fa';
+import { db } from '../../firebase';
+import { doc, getDoc } from 'firebase/firestore';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -20,8 +22,21 @@ const Login = () => {
         setError('');
         setLoading(true);
         try {
-            await login(email, password);
-            navigate(from, { replace: true });
+            const result = await login(email, password);
+            
+            // Check if user is a delivery person
+            const userDocRef = doc(db, 'users', result.user.uid);
+            const userDocSnap = await getDoc(userDocRef);
+            let role = 'buyer';
+            if (userDocSnap.exists()) {
+                role = userDocSnap.data().role || 'buyer';
+            }
+
+            if (role === 'delivery') {
+                navigate('/delivery', { replace: true });
+            } else {
+                navigate(from, { replace: true });
+            }
         } catch (err) {
             setError('Failed to log in: ' + err.message);
         } finally {
@@ -32,8 +47,20 @@ const Login = () => {
     const handleGoogleLogin = async () => {
         setError('');
         try {
-            await loginWithGoogle();
-            navigate(from, { replace: true });
+            const result = await loginWithGoogle();
+            
+            const userDocRef = doc(db, 'users', result.user.uid);
+            const userDocSnap = await getDoc(userDocRef);
+            let role = 'buyer';
+            if (userDocSnap.exists()) {
+                role = userDocSnap.data().role || 'buyer';
+            }
+
+            if (role === 'delivery') {
+                navigate('/delivery', { replace: true });
+            } else {
+                navigate(from, { replace: true });
+            }
         } catch (err) {
             setError('Google login failed: ' + err.message);
         }
@@ -42,8 +69,20 @@ const Login = () => {
     const handleMicrosoftLogin = async () => {
         setError('');
         try {
-            await loginWithMicrosoft();
-            navigate(from, { replace: true });
+            const result = await loginWithMicrosoft();
+            
+            const userDocRef = doc(db, 'users', result.user.uid);
+            const userDocSnap = await getDoc(userDocRef);
+            let role = 'buyer';
+            if (userDocSnap.exists()) {
+                role = userDocSnap.data().role || 'buyer';
+            }
+
+            if (role === 'delivery') {
+                navigate('/delivery', { replace: true });
+            } else {
+                navigate(from, { replace: true });
+            }
         } catch (err) {
             setError('Microsoft login failed: ' + err.message);
         }

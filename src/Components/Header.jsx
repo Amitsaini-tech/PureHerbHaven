@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { IoIosSearch } from "react-icons/io";
 import { MdShoppingBasket, MdMenu, MdClose } from 'react-icons/md';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -18,6 +18,8 @@ const Header = () => {
   const { toggleCart, getCartCount } = useCart();
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const isDeliveryLanding = location.pathname.startsWith('/deliver');
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -73,12 +75,14 @@ const Header = () => {
           <div className="flex justify-between items-center h-12">
 
             {/* Mobile Menu Button */}
-            <button
-              className="xl:hidden p-2 -ml-2 text-gray-700 hover:text-amber-700"
-              onClick={() => setIsMobileMenuOpen(true)}
-            >
-              <MdMenu className="text-2xl" />
-            </button>
+            {!isDeliveryLanding && (
+              <button
+                className="xl:hidden p-2 -ml-2 text-gray-700 hover:text-amber-700"
+                onClick={() => setIsMobileMenuOpen(true)}
+              >
+                <MdMenu className="text-2xl" />
+              </button>
+            )}
 
             {/* Logo */}
             <Link to="/" className="flex-shrink-0 flex items-center">
@@ -88,18 +92,9 @@ const Header = () => {
             </Link>
 
             {/* Desktop Navigation */}
-            <nav className="hidden xl:flex space-x-1 lg:space-x-4">
-              {navLinks.slice(0, 5).map((link) => (
-                <Link
-                  key={link.name}
-                  to={link.path}
-                  className="text-gray-800 hover:text-amber-700 px-2 py-2 rounded-md text-sm font-medium uppercase tracking-wide transition-colors"
-                >
-                  {link.name}
-                </Link>
-              ))}
-              <div className="hidden lg:flex space-x-4">
-                {navLinks.slice(5).map((link) => (
+            {!isDeliveryLanding && (
+              <nav className="hidden xl:flex space-x-1 lg:space-x-4">
+                {navLinks.slice(0, 5).map((link) => (
                   <Link
                     key={link.name}
                     to={link.path}
@@ -108,75 +103,103 @@ const Header = () => {
                     {link.name}
                   </Link>
                 ))}
-              </div>
-            </nav>
+                <div className="hidden lg:flex space-x-4">
+                  {navLinks.slice(5).map((link) => (
+                    <Link
+                      key={link.name}
+                      to={link.path}
+                      className="text-gray-800 hover:text-amber-700 px-2 py-2 rounded-md text-sm font-medium uppercase tracking-wide transition-colors"
+                    >
+                      {link.name}
+                    </Link>
+                  ))}
+
+                </div>
+              </nav>
+            )}
 
             {/* Icons */}
             <div className="flex items-center space-x-2 sm:space-x-4">
-              <button
-                onClick={() => setIsSearchOpen(true)}
-                className="p-2 text-gray-700 hover:text-amber-700 transition-colors"
-              >
-                <IoIosSearch className="text-2xl" />
-              </button>
+              {!isDeliveryLanding && (
+                <>
+                  <button
+                    onClick={() => setIsSearchOpen(true)}
+                    className="p-2 text-gray-700 hover:text-amber-700 transition-colors"
+                  >
+                    <IoIosSearch className="text-2xl" />
+                  </button>
 
-              <button
-                onClick={toggleCart}
-                className="p-2 text-gray-700 hover:text-amber-700 transition-colors relative"
-              >
-                <MdShoppingBasket className="text-2xl" />
-                {getCartCount() > 0 && (
-                  <span className="absolute top-0 right-0 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-bold leading-none text-white transform translate-x-1/4 -translate-y-1/4 bg-amber-700 rounded-full">
-                    {getCartCount()}
-                  </span>
-                )}
-              </button>
+                  <button
+                    onClick={toggleCart}
+                    className="p-2 text-gray-700 hover:text-amber-700 transition-colors relative"
+                  >
+                    <MdShoppingBasket className="text-2xl" />
+                    {getCartCount() > 0 && (
+                      <span className="absolute top-0 right-0 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-bold leading-none text-white transform translate-x-1/4 -translate-y-1/4 bg-amber-700 rounded-full">
+                        {getCartCount()}
+                      </span>
+                    )}
+                  </button>
+                </>
+              )}
 
               {user ? (
-                <div className="relative ml-2">
-                  <button
-                    onClick={() => setIsProfileOpen(!isProfileOpen)}
-                    className="flex items-center justify-center w-8 h-8 rounded-full bg-amber-100 text-amber-800 font-bold border border-amber-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-amber-500"
-                  >
-                    {user.initials}
-                  </button>
-                  <AnimatePresence>
-                    {isProfileOpen && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 10 }}
-                        className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5 z-50"
-                      >
-                        <div className="px-4 py-2 border-b border-gray-100">
-                          <p className="text-sm font-medium text-gray-900">{user.name || 'User'}</p>
-                          <p className="text-xs text-gray-500 truncate">{user.email || 'user@example.com'}</p>
-                        </div>
-                        <Link to="/profile" onClick={() => setIsProfileOpen(false)} className="block px-4 py-2 text-sm text-gray-700 hover:bg-amber-50 hover:text-amber-900">My Profile</Link>
-                        <Link to="/orders" onClick={() => setIsProfileOpen(false)} className="block px-4 py-2 text-sm text-gray-700 hover:bg-amber-50 hover:text-amber-900">My Orders</Link>
-                        {user.isAdmin && (
-                          <Link to="/admin" onClick={() => setIsProfileOpen(false)} className="block px-4 py-2 text-sm font-medium text-amber-700 hover:bg-amber-50">Admin Dashboard</Link>
-                        )}
-                        <button
-                          onClick={() => {
-                            setIsProfileOpen(false);
-                            logout();
-                            navigate('/');
-                          }}
-                          className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50"
+                  <div className="relative ml-2">
+                    <button
+                      onClick={() => setIsProfileOpen(!isProfileOpen)}
+                      className="flex items-center justify-center w-8 h-8 rounded-full bg-amber-100 text-amber-800 font-bold border border-amber-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-amber-500"
+                    >
+                      {user.initials}
+                    </button>
+                    <AnimatePresence>
+                      {isProfileOpen && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: 10 }}
+                          className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5 z-50"
                         >
-                          Logout
-                        </button>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              ) : (
-                <Link to="/login" className="hidden sm:block ml-2 px-4 py-1.5 text-sm font-medium text-amber-900 border border-amber-700 rounded-full hover:bg-amber-50 transition-colors">
-                  Login
-                </Link>
-              )}
-            </div>
+                          <div className="px-4 py-2 border-b border-gray-100">
+                            <p className="text-sm font-medium text-gray-900">{user.name || 'User'}</p>
+                            <p className="text-xs text-gray-500 truncate">{user.email || 'user@example.com'}</p>
+                          </div>
+                          <Link to="/profile" onClick={() => setIsProfileOpen(false)} className="block px-4 py-2 text-sm text-gray-700 hover:bg-amber-50 hover:text-amber-900">My Profile</Link>
+                          {!user.isDelivery && (
+                            <Link to="/orders" onClick={() => setIsProfileOpen(false)} className="block px-4 py-2 text-sm text-gray-700 hover:bg-amber-50 hover:text-amber-900">My Orders</Link>
+                          )}
+                          {user.isAdmin && (
+                            <Link to="/admin" onClick={() => setIsProfileOpen(false)} className="block px-4 py-2 text-sm font-medium text-amber-700 hover:bg-amber-50">Admin Dashboard</Link>
+                          )}
+                          {(user.isAdmin || user.isSeller) && (
+                            <Link to="/seller" onClick={() => setIsProfileOpen(false)} className="block px-4 py-2 text-sm font-medium text-amber-700 hover:bg-amber-50">Seller Panel</Link>
+                          )}
+                          {(user.isAdmin || user.isDelivery) && (
+                            <Link to="/delivery" onClick={() => setIsProfileOpen(false)} className="block px-4 py-2 text-sm font-medium text-amber-700 hover:bg-amber-50">Delivery App</Link>
+                          )}
+                          <button
+                            onClick={() => {
+                              setIsProfileOpen(false);
+                              logout();
+                              navigate('/');
+                            }}
+                            className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50"
+                          >
+                            Logout
+                          </button>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                ) : (
+                  <Link
+                    to={isDeliveryLanding ? '/deliver/login' : '/login'}
+                    className="hidden sm:block ml-2 px-4 py-1.5 text-sm font-medium text-amber-900 border border-amber-700 rounded-full hover:bg-amber-50 transition-colors"
+                  >
+                    Login
+                  </Link>
+                )}
+              </div>
+            {/* removed closing tag */}
           </div>
         </div>
       </header>
@@ -230,6 +253,12 @@ const Header = () => {
                       </div>
                       {user.isAdmin && (
                         <Link to="/admin" onClick={() => setIsMobileMenuOpen(false)} className="text-center py-2 bg-amber-50 text-amber-900 rounded-md text-sm font-medium border border-amber-100">Admin Dashboard</Link>
+                      )}
+                      {(user.isAdmin || user.isSeller) && (
+                        <Link to="/seller" onClick={() => setIsMobileMenuOpen(false)} className="text-center py-2 bg-amber-50 text-amber-900 rounded-md text-sm font-medium border border-amber-100">Seller Panel</Link>
+                      )}
+                      {(user.isAdmin || user.isDelivery) && (
+                        <Link to="/delivery" onClick={() => setIsMobileMenuOpen(false)} className="text-center py-2 bg-amber-50 text-amber-900 rounded-md text-sm font-medium border border-amber-100">Delivery App</Link>
                       )}
                     </div>
                   )}

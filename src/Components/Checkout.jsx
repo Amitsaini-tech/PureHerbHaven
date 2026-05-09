@@ -36,6 +36,7 @@ const Checkout = () => {
         setIsProcessing(true);
 
         const orderId = `ORD-${Math.floor(Math.random() * 1000000000)}`;
+        const sellerIds = [...new Set(cartItems.map(item => item.sellerId).filter(Boolean))];
 
         try {
             // Save order to Firestore
@@ -48,8 +49,10 @@ const Checkout = () => {
                     title: item.title,
                     price: item.Price,
                     imgsrc: item.imgsrc,
-                    quantity: item.quantity
+                    quantity: item.quantity,
+                    sellerId: item.sellerId || null
                 })),
+                sellerIds,
                 subtotal,
                 shipping,
                 total,

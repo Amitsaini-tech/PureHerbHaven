@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { db } from '../../firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { useAuth } from '../../context/AuthContext';
 import Footer from '../Footer';
 import { CATEGORIES, FINISHES, SKIN_TYPES } from '../../utils/constants';
 
 const ProductUpload = () => {
+    const { user } = useAuth();
     const [formData, setFormData] = useState({
         title: '',
         price: '',
@@ -45,6 +47,8 @@ const ProductUpload = () => {
                 rating: 0,
                 reviews: [],
                 relatedIds: [],
+                sellerId: user.uid,
+                sellerName: user.name,
                 createdAt: serverTimestamp()
             };
 

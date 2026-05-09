@@ -7,7 +7,8 @@ import {
     onAuthStateChanged,
     updateProfile
 } from 'firebase/auth';
-import { auth, googleProvider, microsoftProvider } from '../firebase';
+import { auth, db, googleProvider, microsoftProvider } from '../firebase';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
 
 const ADMIN_EMAILS = [
     'sainiamit3464@gmail.com',
@@ -25,23 +26,45 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             if (currentUser) {
-                const nameParts = (currentUser.displayName || currentUser.email.split('@')[0]).split(' ');
-                const initials = nameParts.length > 1 
-                    ? `${nameParts[0][0]}${nameParts[nameParts.length - 1][0]}`.toUpperCase()
-                    : `${nameParts[0][0]}`.toUpperCase();
+                const displayName = (currentUser.displayName || currentUser.email.split('@')[0] || '').trim();
+                const nameParts = displayName.split(/\s+/).filter(Boolean);
+                let initials = 'U';
+                if (nameParts.length > 0) {
+                    initials = nameParts.length > 1 
+                        ? `${nameParts[0][0]}${nameParts[nameParts.length - 1][0]}`.toUpperCase()
+                        : `${nameParts[0][0]}`.toUpperCase();
+                }
                 
-                setUser({
-                    uid: currentUser.uid,
-                    name: currentUser.displayName || currentUser.email.split('@')[0],
-                    email: currentUser.email,
-                    initials: initials,
-                    photoURL: currentUser.photoURL,
-                    isAdmin: ADMIN_EMAILS.includes(currentUser.email)
-                });
+                const checkUserRole = async () => {
+                    let role = 'buyer';
+                    try {
+                        const userDocRef = doc(db, 'users', currentUser.uid);
+                        const userDocSnap = await getDoc(userDocRef);
+                        if (userDocSnap.exists()) {
+                            role = userDocSnap.data().role || 'buyer';
+                        }
+                    } catch (error) {
+                        console.error('Error fetching user role:', error);
+                    }
+
+                    setUser({
+                        uid: currentUser.uid,
+                        name: currentUser.displayName || currentUser.email.split('@')[0],
+                        email: currentUser.email,
+                        initials: initials,
+                        photoURL: currentUser.photoURL,
+                        isAdmin: ADMIN_EMAILS.includes(currentUser.email),
+                        isSeller: role === 'seller',
+                        isDelivery: role === 'delivery',
+                        role: role
+                    });
+                    setLoading(false);
+                };
+                checkUserRole();
             } else {
                 setUser(null);
+                setLoading(false);
             }
-            setLoading(false);
         });
 
         return () => unsubscribe();
@@ -51,18 +74,46 @@ export const AuthProvider = ({ children }) => {
         return signInWithEmailAndPassword(auth, email, password);
     };
 
-    const signup = async (email, password, name) => {
+    const signup = async (email, password, name, role = 'buyer') => {
         const result = await createUserWithEmailAndPassword(auth, email, password);
         await updateProfile(result.user, { displayName: name });
+        
+        // Save user role to Firestore
+        await setDoc(doc(db, 'users', result.user.uid), {
+            uid: result.user.uid,
+            name,
+            email,
+            role,
+            createdAt: new Date().toISOString()
+        });
+        
+        return result;
+    };
+
+    const handleOAuthLogin = async (provider) => {
+        const result = await signInWithPopup(auth, provider);
+        const userDocRef = doc(db, 'users', result.user.uid);
+        const userDocSnap = await getDoc(userDocRef);
+        
+        // If user doesn't exist in Firestore, create a default buyer record
+        if (!userDocSnap.exists()) {
+            await setDoc(userDocRef, {
+                uid: result.user.uid,
+                name: result.user.displayName || result.user.email.split('@')[0],
+                email: result.user.email,
+                role: 'buyer',
+                createdAt: new Date().toISOString()
+            });
+        }
         return result;
     };
 
     const loginWithGoogle = () => {
-        return signInWithPopup(auth, googleProvider);
+        return handleOAuthLogin(googleProvider);
     };
 
     const loginWithMicrosoft = () => {
-        return signInWithPopup(auth, microsoftProvider);
+        return handleOAuthLogin(microsoftProvider);
     };
 
     const logout = () => {
