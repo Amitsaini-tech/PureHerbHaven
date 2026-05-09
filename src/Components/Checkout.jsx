@@ -38,12 +38,16 @@ const Checkout = () => {
         const orderId = `ORD-${Math.floor(Math.random() * 1000000000)}`;
         const sellerIds = [...new Set(cartItems.map(item => item.sellerId).filter(Boolean))];
 
+        const paymentMethodMap = { 'card': 'Card', 'upi': 'UPI', 'cod': 'COD' };
+        const normalizedPayment = paymentMethodMap[paymentMethod] || paymentMethod;
+
         try {
             // Save order to Firestore
             await addDoc(collection(db, "orders"), {
                 orderId,
                 userId: user.uid,
                 userEmail: user.email,
+                userName: user.name,
                 items: cartItems.map(item => ({
                     id: item.id,
                     title: item.title,
@@ -56,7 +60,7 @@ const Checkout = () => {
                 subtotal,
                 shipping,
                 total,
-                paymentMethod,
+                paymentMethod: normalizedPayment,
                 shippingAddress: addressData,
                 status: 'Confirmed',
                 createdAt: serverTimestamp()

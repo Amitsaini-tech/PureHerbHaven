@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../../firebase';
-import { collection, getDocs, doc, updateDoc, orderBy, query, where } from 'firebase/firestore';
+import { collection, doc, updateDoc, orderBy, query, where, onSnapshot } from 'firebase/firestore';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../context/AuthContext';
 import { IoMdClose } from 'react-icons/io';
@@ -15,28 +15,30 @@ const SellerPanel = () => {
     const [updating, setUpdating] = useState(false);
 
     useEffect(() => {
-        if (user) {
-            fetchOrders();
-        }
-    }, [user]);
+        if (!user) return;
 
-    const fetchOrders = async () => {
-        setLoading(true);
-        try {
-            const q = query(
-                collection(db, "orders"), 
-                where("sellerIds", "array-contains", user.uid),
-                orderBy("createdAt", "desc")
-            );
-            const snapshot = await getDocs(q);
-            const ordersData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        const q = query(
+            collection(db, 'orders'),
+            where('sellerIds', 'array-contains', user.uid)
+        );
+
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+            const ordersData = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+            // Sort by createdAt descending in memory to avoid needing a composite index
+            ordersData.sort((a, b) => {
+                const aTime = a.createdAt?.toMillis?.() || 0;
+                const bTime = b.createdAt?.toMillis?.() || 0;
+                return bTime - aTime;
+            });
             setOrders(ordersData);
-        } catch (error) {
-            console.error("Error fetching orders:", error);
-        } finally {
             setLoading(false);
-        }
-    };
+        }, (error) => {
+            console.error('Error fetching orders:', error);
+            setLoading(false);
+        });
+
+        return () => unsubscribe();
+    }, [user]);
 
     const updateOrderStatus = async (orderId, newStatus) => {
         setUpdating(true);
@@ -232,7 +234,12 @@ const SellerPanel = () => {
                                             <p className="font-semibold text-gray-900 mb-1">{expandedOrder.shippingAddress?.fullName}</p>
                                             <p className="text-gray-600 mb-1">{expandedOrder.shippingAddress?.address}</p>
                                             <p className="text-gray-600 mb-1">{expandedOrder.shippingAddress?.city}, {expandedOrder.shippingAddress?.state} {expandedOrder.shippingAddress?.zip}</p>
-                                            <p className="text-gray-800 font-medium mt-2 pt-2 border-t border-gray-200">📞 {expandedOrder.shippingAddress?.phone}</p>
+                                            <div className="mt-2 pt-2 border-t border-gray-200 space-y-1">
+                                                <p className="text-gray-800 font-medium">📞 {expandedOrder.shippingAddress?.phone}</p>
+                                                {expandedOrder.userEmail && (
+                                                    <p className="text-gray-600">✉️ {expandedOrder.userEmail}</p>
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
 

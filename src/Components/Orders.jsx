@@ -10,6 +10,7 @@ const Orders = () => {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [trackingOrderId, setTrackingOrderId] = useState(null);
 
     useEffect(() => {
         const fetchOrders = async () => {
@@ -103,10 +104,66 @@ const Orders = () => {
                                         <div className="text-sm text-gray-600">
                                             <span className="font-medium">Shipping to:</span> {order.shippingAddress?.fullName}, {order.shippingAddress?.address}
                                         </div>
-                                        <button className="px-6 py-2 bg-gray-900 text-white rounded-md text-sm font-medium hover:bg-amber-800 transition-colors">
-                                            Track Order
+                                        <button 
+                                            onClick={() => setTrackingOrderId(trackingOrderId === order.id ? null : order.id)}
+                                            className="px-6 py-2 bg-gray-900 text-white rounded-md text-sm font-medium hover:bg-amber-800 transition-colors"
+                                        >
+                                            {trackingOrderId === order.id ? 'Hide Tracking' : 'Track Order'}
                                         </button>
                                     </div>
+
+                                    {trackingOrderId === order.id && (
+                                        <div className="mt-6 p-6 bg-gray-50 rounded-xl border border-gray-100">
+                                            <h4 className="text-base font-semibold text-gray-900 mb-6">Order Tracking</h4>
+                                            
+                                            <div className="space-y-6 relative before:absolute before:inset-0 before:left-3 before:h-full before:w-0.5 before:bg-gray-200">
+                                                {/* Step 1: Placed */}
+                                                <div className="relative flex items-center gap-4 pl-8">
+                                                    <div className={`absolute left-1.5 w-3.5 h-3.5 rounded-full border-2 ${['Confirmed', 'Pending', 'Packed', 'Dispatched', 'Out for Delivery', 'Delivered'].includes(order.status) ? 'bg-green-500 border-green-500' : 'bg-white border-gray-300'}`}></div>
+                                                    <div>
+                                                        <h5 className="text-sm font-bold text-gray-900">Order Placed</h5>
+                                                        <p className="text-xs text-gray-500">We have received your order.</p>
+                                                    </div>
+                                                </div>
+
+                                                {/* Step 2: Packed */}
+                                                <div className="relative flex items-center gap-4 pl-8">
+                                                    <div className={`absolute left-1.5 w-3.5 h-3.5 rounded-full border-2 ${['Packed', 'Dispatched', 'Out for Delivery', 'Delivered'].includes(order.status) ? 'bg-green-500 border-green-500' : 'bg-white border-gray-300'}`}></div>
+                                                    <div>
+                                                        <h5 className="text-sm font-bold text-gray-900">Packed</h5>
+                                                        <p className="text-xs text-gray-500">Seller has packed your items.</p>
+                                                    </div>
+                                                </div>
+
+                                                {/* Step 3: Dispatched */}
+                                                <div className="relative flex items-center gap-4 pl-8">
+                                                    <div className={`absolute left-1.5 w-3.5 h-3.5 rounded-full border-2 ${['Dispatched', 'Out for Delivery', 'Delivered'].includes(order.status) ? 'bg-green-500 border-green-500' : 'bg-white border-gray-300'}`}></div>
+                                                    <div>
+                                                        <h5 className="text-sm font-bold text-gray-900">Dispatched</h5>
+                                                        <p className="text-xs text-gray-500">Order handed over to delivery partner.</p>
+                                                    </div>
+                                                </div>
+
+                                                {/* Step 4: Out for Delivery */}
+                                                <div className="relative flex items-center gap-4 pl-8">
+                                                    <div className={`absolute left-1.5 w-3.5 h-3.5 rounded-full border-2 ${['Out for Delivery', 'Delivered'].includes(order.status) ? 'bg-green-500 border-green-500' : 'bg-white border-gray-300'}`}></div>
+                                                    <div>
+                                                        <h5 className="text-sm font-bold text-gray-900">Out for Delivery</h5>
+                                                        <p className="text-xs text-gray-500">Delivery agent is on the way.</p>
+                                                    </div>
+                                                </div>
+
+                                                {/* Step 5: Delivered */}
+                                                <div className="relative flex items-center gap-4 pl-8">
+                                                    <div className={`absolute left-1.5 w-3.5 h-3.5 rounded-full border-2 ${order.status === 'Delivered' ? 'bg-green-500 border-green-500' : 'bg-white border-gray-300'}`}></div>
+                                                    <div>
+                                                        <h5 className="text-sm font-bold text-gray-900">Delivered</h5>
+                                                        <p className="text-xs text-gray-500">Order delivered successfully.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         ))}
