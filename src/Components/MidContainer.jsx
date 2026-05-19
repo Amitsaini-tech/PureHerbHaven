@@ -8,7 +8,7 @@ import video from "../image/video.mp4"
 
 const MidContainer = () => {
   const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([...CATEGORIES.slice(0, 4), 'Shop all']);
+  const [categories] = useState([...CATEGORIES.slice(0, 4), 'Shop all']);
   const [selectedCategory, setSelectedCategory] = useState(CATEGORIES[0]);
   const [loading, setLoading] = useState(true);
   const { addToCart } = useCart();

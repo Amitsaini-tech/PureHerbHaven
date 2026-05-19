@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../../firebase';
-import { collection, doc, updateDoc, orderBy, query, where, onSnapshot } from 'firebase/firestore';
+import { collection, doc, updateDoc, query, where, onSnapshot } from 'firebase/firestore';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../context/AuthContext';
 import { IoMdClose } from 'react-icons/io';

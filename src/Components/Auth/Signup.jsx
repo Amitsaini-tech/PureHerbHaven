@@ -146,9 +146,9 @@ const Signup = () => {
                                 />
                                 <label htmlFor="terms" className="ml-2 block text-sm text-gray-900">
                                     I agree to the{' '}
-                                    <a href="#" className="font-medium text-amber-700 hover:text-amber-600">
+                                    <button type="button" className="font-medium text-amber-700 hover:text-amber-600 bg-transparent border-none p-0 cursor-pointer">
                                         Terms and Conditions
-                                    </a>
+                                    </button>
                                 </label>
                             </div>
 

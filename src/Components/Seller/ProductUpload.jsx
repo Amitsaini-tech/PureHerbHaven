@@ -20,7 +20,6 @@ const ProductUpload = () => {
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
-    const [errorMessage, setErrorMessage] = useState('');
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -30,7 +29,6 @@ const ProductUpload = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsSubmitting(true);
-        setErrorMessage('');
         
         try {
             const newProduct = {
@@ -65,7 +63,6 @@ const ProductUpload = () => {
             setTimeout(() => setSuccessMessage(''), 3000);
         } catch (error) {
             console.error("Error adding document: ", error);
-            setErrorMessage('Failed to upload product. Please try again.');
         } finally {
             setIsSubmitting(false);
         }

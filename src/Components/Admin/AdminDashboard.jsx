@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../../firebase';
-import { collection, getDocs, query, orderBy, limit, deleteDoc, doc } from 'firebase/firestore';
+import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import Footer from '../Footer';
 import { CATEGORIES } from '../../utils/constants';
-import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
+
 
 const AdminDashboard = () => {
     const [stats, setStats] = useState({
@@ -40,10 +40,6 @@ const AdminDashboard = () => {
                 
                 const uniqueCategories = [...new Set(products.map(p => p.categories))];
                 
-                const recentQuery = query(collection(db, "products"), orderBy("createdAt", "desc"), limit(5));
-                const recentSnapshot = await getDocs(recentQuery);
-                const recent = recentSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-
                 setStats({
                     totalProducts: productsSnapshot.size,
                     categories: uniqueCategories.length,

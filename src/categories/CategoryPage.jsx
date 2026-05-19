@@ -42,7 +42,6 @@ const CategoryPage = () => {
     const { categoryName } = useParams();
     const { addToCart } = useCart();
     const [products, setProducts] = useState([]);
-    const [loading, setLoading] = useState(true);
     const [selectedFilters, setSelectedFilters] = useState({
         categories: [],
         finish: [],
@@ -56,7 +55,6 @@ const CategoryPage = () => {
 
     useEffect(() => {
         const fetchProducts = async () => {
-            setLoading(true);
             try {
                 const querySnapshot = await getDocs(collection(db, "products"));
                 const productsData = querySnapshot.docs.map(doc => ({
@@ -66,8 +64,6 @@ const CategoryPage = () => {
                 setProducts(productsData);
             } catch (error) {
                 console.error("Error fetching products: ", error);
-            } finally {
-                setLoading(false);
             }
         };
 

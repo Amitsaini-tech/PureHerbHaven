@@ -9,7 +9,6 @@ import lipsticks from "../image/web_Lipstick.webp"
 import mid_year from "../image/mid_year.webp"
 import web_bed from "../image/web_bed.webp"
 import { GoArrowLeft, GoArrowRight } from "react-icons/go";
-import { motion } from "framer-motion";
 
 const images = [sandalwood, summer, herbal, lipsticks, mid_year, web_bed];
 

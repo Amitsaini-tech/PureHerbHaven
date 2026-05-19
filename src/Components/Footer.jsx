@@ -46,9 +46,9 @@ const Footer = () => {
                         <ul className="space-y-3">
                             {['Our Story', 'Gifting', 'Ingredients', 'Recycle with us', 'Hotel Partnerships', 'Refer & Earn', 'Loyalty Program'].map(link => (
                                 <li key={link}>
-                                    <a href="#" className="text-gray-600 hover:text-amber-700 transition-colors">
+                                    <button type="button" className="text-gray-600 hover:text-amber-700 transition-colors bg-transparent border-none p-0 cursor-pointer">
                                         {link}
-                                    </a>
+                                    </button>
                                 </li>
                             ))}
                         </ul>
@@ -60,9 +60,9 @@ const Footer = () => {
                         <ul className="space-y-3">
                             {['Contact Us', 'Privacy Policy', 'Refund Policy', 'Shipping Policy', 'Terms of Service', 'Track Your Order', 'Affiliate Program'].map(link => (
                                 <li key={link}>
-                                    <a href="#" className="text-gray-600 hover:text-amber-700 transition-colors">
+                                    <button type="button" className="text-gray-600 hover:text-amber-700 transition-colors bg-transparent border-none p-0 cursor-pointer">
                                         {link}
-                                    </a>
+                                    </button>
                                 </li>
                             ))}
                         </ul>
